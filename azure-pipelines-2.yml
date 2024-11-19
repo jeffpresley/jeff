@@ -1,0 +1,34 @@
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+# Compile the project using Maven
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'compile'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+    mavenOptions: '-Xmx3072m'
+
+# Package the project using Maven
+- task: Maven@4
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'package'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    mavenOptions: '-Xmx3072m'
+
